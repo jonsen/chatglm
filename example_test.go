@@ -3,7 +3,7 @@ package chatglm_test
 import (
 	"fmt"
 
-	"github.com/go-aie/chatglm"
+	"github.com/jonsen/chatglm"
 )
 
 func Example_generate() {

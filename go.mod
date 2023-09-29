@@ -1,3 +1,3 @@
-module github.com/go-aie/chatglm
+module github.com/jonsen/chatglm
 
 go 1.20
