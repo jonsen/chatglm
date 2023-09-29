@@ -1,22 +1,21 @@
 # ChatGLM
 
-[![Go Reference](https://pkg.go.dev/badge/github.com/go-aie/chatglm/vulndb.svg)][1]
+[![Go Reference](https://pkg.go.dev/badge/github.com/jonsen/chatglm/vulndb.svg)][1]
 
 Go binding for [ChatGLM.cpp][2].
-
 
 ## Usage
 
 ### Get the Code
 
 ```bash
-git clone --recursive https://github.com/go-aie/chatglm.git && cd chatglm
+git clone --recursive https://github.com/jonsen/chatglm.git && cd chatglm
 ```
 
 Or:
 
 ```bash
-git clone https://github.com/go-aie/chatglm.git && cd chatglm
+git clone https://github.com/jonsen/chatglm.git && cd chatglm
 git submodule update --init --recursive
 ```
 
@@ -44,12 +43,10 @@ Run the tests:
 go test -v -race ./...
 ```
 
-
 ## License
 
 [MIT](LICENSE)
 
-
-[1]: https://pkg.go.dev/github.com/go-aie/chatglm
+[1]: https://pkg.go.dev/github.com/jonsen/chatglm
 [2]: https://github.com/li-plus/chatglm.cpp
 [3]: https://github.com/li-plus/chatglm.cpp#getting-started
