@@ -43,6 +43,12 @@ Run the tests:
 go test -v -race ./...
 ```
 
+Run the demo:
+
+```bash
+go run demo/main.go -m [your model file] -i
+```
+
 ## License
 
 [MIT](LICENSE)
