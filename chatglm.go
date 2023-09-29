@@ -102,15 +102,6 @@ type Turn struct {
 
 func BuildPrompt(query string, history []*Turn) string {
 	text := `
-{{- range $i, $turn := $.History -}}
-[Round {{$i}}]
-
-问：{{$turn.Question}}
-
-答：{{$turn.Answer}}
-
-{{end -}}
-[Round {{len $.History}}]
 
 问：{{$.Query}}
 
