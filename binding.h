@@ -1,7 +1,6 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 #include <stdbool.h>
 
 // This function is implemented in Go.
@@ -18,6 +17,7 @@ void DeleteGenerationConfig(GenerationConfig* p);
 Pipeline* NewPipeline(char* path);
 void DeletePipeline(Pipeline* p);
 void Pipeline_Generate(Pipeline* p, char* prompt, GenerationConfig* gen_config, char* output);
+void Pipeline_Chat(Pipeline* p, const char** history, const int size, GenerationConfig* gen_config, char* output);
 
 #ifdef __cplusplus
 }

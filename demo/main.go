@@ -60,7 +60,7 @@ func interactive() {
 	p := chatglm.New(*model)
 	defer p.Delete()
 
-	history := []*chatglm.Turn{}
+	history := []string{}
 
 	fmt.Println("欢迎使用 ChatGLM-GO 个人助手！")
 
@@ -76,21 +76,33 @@ func interactive() {
 		if prompt == "stop" || prompt == "exit" {
 			return
 		}
+		if prompt == "clear" {
+			history = []string{}
+			continue
+		}
 
-		out := p.StreamGenerate(chatglm.BuildPrompt(prompt, history))
+		history = append(history, prompt)
+
+		//out := p.StreamChat(chatglm.BuildPrompt(prompt, history), chatglm.WithDoSample(false),
+		out := p.StreamChat(history, chatglm.WithDoSample(false),
+			chatglm.WithTemperature(0.5), chatglm.WithTopP(0.85), chatglm.WithTopK(3))
 		fmt.Println("Answer:")
 		for txt := range out {
 			fmt.Print(txt)
 			answer += txt
 		}
 		fmt.Println("")
+		// history = []string{}
+		history = append(history, answer)
 
-		// 保留3个历史
-		if len(history) >= 3 {
+		// println("history:", len(history))
+		// fmt.Println(history)
+		// 保留3个历史对话，6个记录
+		if len(history) >= 6 {
 			history = append(history[:0], history[1:]...)
 		}
 
-		history = append(history, &chatglm.Turn{Question: prompt, Answer: answer})
+		// fmt.Println("history:", len(history))
 
 	}
 }

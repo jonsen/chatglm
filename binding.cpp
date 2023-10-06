@@ -3,6 +3,16 @@
 #include "binding.h"
 #include <vector>
 #include <algorithm>
+#include <cstring>
+#include <iostream>
+
+std::vector<std::string> arrToVector(const char** strings, int size) {
+    std::vector<std::string> result;
+    for (int i = 0; i < size; i++) {
+        result.push_back(std::string(strings[i]));
+    }
+    return result;
+}
 
 /* ===== structure/class definitions. ===== */
 
@@ -81,6 +91,15 @@ void Pipeline_Generate(Pipeline* p, char* prompt, GenerationConfig* gen_config, 
     const GenerationConfig & config = *gen_config;
     auto streamer = std::make_shared<CallbackStreamer>(p, p->tokenizer.get());
     std::string result = p->generate(prompt, config, streamer.get());
+    if (output != NULL) {
+        std::strcpy(output, result.c_str());
+    }
+}
+
+void Pipeline_Chat(Pipeline* p, const char** history, const int size, GenerationConfig* gen_config, char* output) {
+    const GenerationConfig & config = *gen_config;
+    auto streamer = std::make_shared<CallbackStreamer>(p, p->tokenizer.get());
+    std::string result = p->chat(arrToVector(history, size), config, streamer.get());
     if (output != NULL) {
         std::strcpy(output, result.c_str());
     }

@@ -102,6 +102,15 @@ type Turn struct {
 
 func BuildPrompt(query string, history []*Turn) string {
 	text := `
+	{{- range $i, $turn := $.History -}}
+	[Round {{$i}}]
+
+	问：{{$turn.Question}}
+
+	答：{{$turn.Answer}}
+
+	{{end -}}
+	[Round {{len $.History}}]
 
 问：{{$.Query}}
 
@@ -177,6 +186,33 @@ func (c *ChatGLM) StreamGenerate(prompt string, options ...GenerateOption) <-cha
 		defer cleanup()
 
 		C.Pipeline_Generate(c.p, cprompt, conf, nil)
+		setCallback(unsafe.Pointer(c.p), nil)
+	}()
+
+	return ch
+}
+
+// StreamChat is like Generate but operates in stream mode.
+func (c *ChatGLM) StreamChat(history []string, options ...GenerateOption) <-chan string {
+
+	ch := make(chan string)
+	setCallback(unsafe.Pointer(c.p), channel{C: ch}.Send)
+
+	go func() {
+
+		arr := (**C.char)(C.malloc(C.size_t(C.int(len(history)))))
+		cppArray := (*[1 << 30]*C.char)(unsafe.Pointer(arr))[0:len(history):len(history)]
+		for i, s := range history {
+			cppArray[i] = C.CString(s)
+		}
+		defer C.free(unsafe.Pointer(arr))
+
+		opts := newGenerateOptions(options...)
+		conf, cleanup := opts.newGenerationConfig()
+		defer cleanup()
+
+		C.Pipeline_Chat(c.p, &cppArray[0], C.int(len(history)), conf, nil)
+
 		setCallback(unsafe.Pointer(c.p), nil)
 	}()
 
